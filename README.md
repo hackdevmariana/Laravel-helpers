@@ -13,3 +13,8 @@ clearcache.sh
 ```
 Clear Laravel cache.
 
+
+```
+packagestructure.sh package-name
+```
+Creates the package structure `package-name`
