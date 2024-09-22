@@ -1,3 +1,19 @@
+## Starting a project
+
+Installing Laravel, Backpack and Nuxt:
+
+```
+laravue.sh ProjectName
+```
+
+Create the directory ProjectName
+
+And two subdirectories:
+ProjectName_front for the frontend
+ProjectName_back for the backend
+
+## Working with Laravel
+
 ```
 createfiles.sh ModelName
 ```
