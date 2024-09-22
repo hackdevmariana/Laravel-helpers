@@ -18,3 +18,12 @@ Clear Laravel cache.
 packagestructure.sh package-name
 ```
 Creates the package structure `package-name`
+
+
+## Check if the server meets Laravel requirements
+
+To check if the server meets Laravel requirements you can use the two files in the php/ directory.
+
+`index.php` -> checks if the server's PHP version is compatible with Laravel 9 - 11 (PHP > 8.1) and the usual Laravel extensions.
+
+`phpinfo.php` -> shows the server's PHP information.
