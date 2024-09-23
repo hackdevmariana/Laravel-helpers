@@ -3,7 +3,7 @@
 Installing Laravel, Backpack and Nuxt:
 
 ```
-laravue.sh ProjectName
+laravue-backpack.sh ProjectName
 ```
 
 Create the directory ProjectName
