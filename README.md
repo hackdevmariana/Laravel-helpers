@@ -19,7 +19,7 @@ ProjectName_back for the backend
 Installing Laravel, Voyager and Nuxt:
 
 ```
-laravue-backpack.sh ProjectName
+laravue-voyager.sh ProjectName
 ```
 
 Create the directory ProjectName
