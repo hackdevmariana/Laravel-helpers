@@ -1,8 +1,9 @@
 #!/bin/bash
 
 capitalize() {
-    echo "$1" | tr '[:lower:]' '[:upper:]' | sed 's/^\(.\)/\U\1/'
+    echo "$1" | tr '[:upper:]' '[:lower:]' | sed 's/^\(.\)/\U\1/'
 }
+
 
 # Comprobar el número de parámetros
 if [ $# -eq 0 ]; then
