@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e  # Detiene el script si algún comando falla
+set -e  # Stops the script if any command fails
 
 # Colores
 GREEN='\033[0;32m'
