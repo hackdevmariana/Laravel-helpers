@@ -1,6 +1,22 @@
 ## Starting a project
 
+#### With Backpack
+
 Installing Laravel, Backpack and Nuxt:
+
+```
+laravue-backpack.sh ProjectName
+```
+
+Create the directory ProjectName
+
+And two subdirectories:
+ProjectName_front for the frontend
+ProjectName_back for the backend
+
+#### With Voyager
+
+Installing Laravel, Voyager and Nuxt:
 
 ```
 laravue-backpack.sh ProjectName
