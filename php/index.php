@@ -21,9 +21,19 @@
             </thead>
             <tbody>
                 <?php
-                // Extensiones requeridas para Laravel
+                // Extensiones requeridas para Laravel y Voyager
                 $requiredExtensions = ['bcmath', 'ctype', 'fileinfo', 'json', 'mbstring', 'openssl', 'pdo', 'tokenizer', 'xml', 'curl'];
-                
+                // Comprobar si GD o Imagick están disponibles para manejo de imágenes
+                $imageExtensions = ['gd', 'imagick'];
+                $imageExtensionLoaded = false;
+
+                foreach ($imageExtensions as $imageExtension) {
+                    if (extension_loaded($imageExtension)) {
+                        $imageExtensionLoaded = true;
+                        break;
+                    }
+                }
+
                 // Verificación de la versión de PHP
                 $phpVersion = phpversion();
                 $phpVersionCheck = version_compare($phpVersion, '8.1', '>=');
@@ -44,10 +54,18 @@
                         <td class="<?php echo extension_loaded($extension) ? 'table-success' : 'table-warning'; ?>">
                             <?php echo extension_loaded($extension) ? 'Ok' : 'Bad'; ?>
                         </td>
-                        <td><?php echo extension_loaded($extension) ? 'The extension is loaded' : 'The extension is not loaded'; ?>
-                        </td>
+                        <td><?php echo extension_loaded($extension) ? 'The extension is loaded' : 'The extension is not loaded'; ?></td>
                     </tr>
                 <?php endforeach; ?>
+
+                <!-- Verificación de GD o Imagick para manejo de imágenes -->
+                <tr>
+                    <td>Image Processing (GD or Imagick)</td>
+                    <td class="<?php echo $imageExtensionLoaded ? 'table-success' : 'table-warning'; ?>">
+                        <?php echo $imageExtensionLoaded ? 'Ok' : 'Bad'; ?>
+                    </td>
+                    <td><?php echo $imageExtensionLoaded ? 'At least one image extension (GD or Imagick) is loaded' : 'Neither GD nor Imagick is loaded'; ?></td>
+                </tr>
             </tbody>
         </table>
 
@@ -59,5 +77,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
+
+</html>
+
 
 </html>
