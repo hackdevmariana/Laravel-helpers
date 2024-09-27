@@ -8,27 +8,28 @@ use Illuminate\Filesystem\Filesystem;
 
 class MakePackageModel extends Command
 {
-    protected $signature = 'make:package-model {name} {--package=} {--migration}';
-    protected $description = 'Create a model and migration in a specific package directory';
+    protected $signature = 'make:package-model {name} {--package=} {--vendor=works} {--migration}';
+    protected $description = 'Create a model and migration in a specific package and vendor directory';
 
     public function handle()
     {
         $name = $this->argument('name');
         $package = $this->option('package') ?? 'webworks';
+        $vendor = $this->option('vendor') ?? 'works'; // Nuevo parámetro vendor
         $createMigration = $this->option('migration');
         
         // Generar el modelo temporalmente en app/Models
         Artisan::call("make:model Models/{$name}");
 
         // Definir la ruta destino del modelo en el paquete
-        $modelDestinationPath = base_path("packages/works/{$package}/src/Models/{$name}.php");
+        $modelDestinationPath = base_path("packages/{$vendor}/{$package}/src/Models/{$name}.php");
         
         // Mover el modelo generado al paquete
         $filesystem = new Filesystem();
         $filesystem->move(app_path("Models/{$name}.php"), $modelDestinationPath);
         
         // Ajustar el namespace del modelo en la nueva ubicación
-        $this->updateNamespace($modelDestinationPath, "Works\\{$package}\\Models");
+        $this->updateNamespace($modelDestinationPath, "{$vendor}\\{$package}\\Models");
 
         $this->info("Model created successfully in {$modelDestinationPath}");
         
@@ -39,7 +40,7 @@ class MakePackageModel extends Command
 
             if ($migrationFileName) {
                 // Mover la migración generada a la carpeta del paquete
-                $migrationDestinationPath = base_path("packages/works/{$package}/database/migrations/{$migrationFileName}");
+                $migrationDestinationPath = base_path("packages/{$vendor}/{$package}/database/migrations/{$migrationFileName}");
                 $filesystem->move(database_path("migrations/{$migrationFileName}"), $migrationDestinationPath);
 
                 $this->info("Migration created successfully in {$migrationDestinationPath}");
@@ -70,3 +71,4 @@ class MakePackageModel extends Command
         return null;
     }
 }
+
