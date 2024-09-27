@@ -82,3 +82,11 @@ Generate a model in the corresponding directory (package and vendor) in case we 
 php artisan make:package-model Menu --package=webworks --migration
 ```
 Generate the model and migration in the corresponding directory (package and vendor) in case we develop a package independent of the application.
+
+
+```
+php artisan make:package-model Menu --vendor=customvendor --package=webworks --migration
+```
+Generate the model and migration in the corresponding directory, indicating package and vendor in case we develop a package independent of the application.
+
+
