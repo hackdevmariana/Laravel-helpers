@@ -67,3 +67,18 @@ To check if the server meets Laravel requirements you can use the two files in t
 `index.php` -> checks if the server's PHP version is compatible with Laravel 9 - 11 (PHP > 8.1) and the usual Laravel extensions.
 
 `phpinfo.php` -> shows the server's PHP information.
+
+
+## Artisan commands
+
+
+```
+php artisan make:package-model Menu --package=webworks
+```
+Generate a model in the corresponding directory (package and vendor) in case we develop a package independent of the application.
+
+
+```
+php artisan make:package-model Menu --package=webworks --migration
+```
+Generate the model and migration in the corresponding directory (package and vendor) in case we develop a package independent of the application.
