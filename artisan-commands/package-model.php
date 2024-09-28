@@ -15,45 +15,42 @@ class MakePackageModel extends Command
     {
         $name = $this->argument('name');
         $package = $this->option('package') ?? 'webworks';
-        $vendor = $this->option('vendor') ?? 'works'; // Nuevo parámetro vendor
+        $vendor = $this->option('vendor') ?? 'works'; // Parámetro vendor
         $createMigration = $this->option('migration');
-        
-        // Generar el modelo temporalmente en app/Models
-        Artisan::call("make:model Models/{$name}");
 
         // Definir la ruta destino del modelo en el paquete
-        $modelDestinationPath = base_path("packages/{$vendor}/{$package}/src/Models/{$name}.php");
-        
-        // Mover el modelo generado al paquete
-        $filesystem = new Filesystem();
-        $filesystem->move(app_path("Models/{$name}.php"), $modelDestinationPath);
-        
-        // Ajustar el namespace del modelo en la nueva ubicación
-        $this->updateNamespace($modelDestinationPath, "{$vendor}\\{$package}\\Models");
+        $modelDestinationNamespace = "{$vendor}\\{$package}\\Models\\{$name}";
+        $modelDestinationPath = "packages/{$vendor}/{$package}/src/Models/{$name}.php";
+
+        // Crear el modelo directamente en la ruta del paquete
+        Artisan::call("make:model", [
+            'name' => $modelDestinationNamespace,
+        ]);
 
         $this->info("Model created successfully in {$modelDestinationPath}");
-        
+
         // Si se ha pasado la opción --migration, generar y mover la migración
         if ($createMigration) {
             Artisan::call("make:migration create_" . strtolower($name) . "_table");
             $migrationFileName = $this->getMigrationFileName($name);
 
             if ($migrationFileName) {
-                // Mover la migración generada a la carpeta del paquete
+                // Definir la ruta de destino de la migración en el paquete
                 $migrationDestinationPath = base_path("packages/{$vendor}/{$package}/database/migrations/{$migrationFileName}");
+
+                // Crear las carpetas necesarias si no existen
+                $filesystem = new Filesystem();
+                $migrationDirectoryPath = dirname($migrationDestinationPath);
+                if (!$filesystem->exists($migrationDirectoryPath)) {
+                    $filesystem->makeDirectory($migrationDirectoryPath, 0755, true);
+                }
+
+                // Mover la migración generada al paquete
                 $filesystem->move(database_path("migrations/{$migrationFileName}"), $migrationDestinationPath);
 
                 $this->info("Migration created successfully in {$migrationDestinationPath}");
             }
         }
-    }
-
-    // Función para actualizar el namespace del modelo
-    protected function updateNamespace($filePath, $newNamespace)
-    {
-        $fileContents = file_get_contents($filePath);
-        $fileContents = str_replace('namespace App\Models;', "namespace {$newNamespace};", $fileContents);
-        file_put_contents($filePath, $fileContents);
     }
 
     // Función para obtener el nombre del archivo de la migración recién creada
