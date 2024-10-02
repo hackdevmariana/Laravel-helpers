@@ -72,9 +72,7 @@ To check if the server meets Laravel requirements you can use the two files in t
 ## Artisan commands
 
 
-```
-php artisan make:package-model Menu --package=webworks
-```
+CreatePackageStructure
 Generate a model in the corresponding directory (package and vendor) in case we develop a package independent of the application.
 
 
@@ -90,3 +88,13 @@ php artisan make:package-model Menu --vendor=customvendor --package=webworks --m
 Generate the model and migration in the corresponding directory, indicating package and vendor in case we develop a package independent of the application.
 
 
+#### Create package structure
+
+
+With CreatePackageStructure.php
+
+
+```
+php artisan make:package ModelName --vendor=vendor-name --package=package-name
+```
+Generate the model, migration, seeder and controller in the corresponding directory (vendor-name/package-name) in case we develop a package independent of the application.
