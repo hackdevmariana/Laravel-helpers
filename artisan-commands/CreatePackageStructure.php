@@ -22,11 +22,11 @@ class CreatePackageStructure extends Command
             return;
         }
 
-        // Mantener los nombres tal cual sin pasarlos a StudlyCase
+
         $paths = [
             "packages/{$vendor}/{$package}/src/Models/",
             "packages/{$vendor}/{$package}/src/Migrations/",
-            "packages/{$vendor}/{$package}/src/Controllers/",
+            "packages/{$vendor}/{$package}/src/Controllers/Api/",
             "packages/{$vendor}/{$package}/src/Seeders/",
         ];
 
@@ -56,7 +56,7 @@ class CreatePackageStructure extends Command
 
         // Mover Controller al paquete
         File::move(app_path("Http/Controllers/{$name}Controller.php"), base_path("packages/{$vendor}/{$package}/src/Controllers/{$name}Controller.php"));
-        $this->info("Moved Controller to packages/{$vendor}/{$package}/src/Controllers/");
+        $this->info("Moved Controller to packages/{$vendor}/{$package}/src/Controllers/Api");
 
         // Mover Migration al paquete
         $migrationFile = $this->getLastMigrationFile($name);
@@ -66,6 +66,25 @@ class CreatePackageStructure extends Command
         } else {
             $this->error('Migration file not found.');
         }
+
+        // Crear ServiceProvider
+
+        $providerNamespace = Str::studly($vendor) . '\\' . Str::studly($package);
+
+
+        $providerContent = "<?php\n\nnamespace {$providerNamespace};\n\nuse Illuminate\Support\ServiceProvider;\n\nclass " . Str::studly($package) . "ServiceProvider extends ServiceProvider\n{\n\tpublic function register()\n\t{\n\t\t// Register package services\n\t}\n\n\tpublic function boot()\n\t{\n\t\t// Register package routes, migrations, etc.\n\t\tif (\$this->app->runningInConsole()) {\n\t\t\t\$this->loadMigrationsFrom(__DIR__.'/Migrations');\n\t\t}\n\t}\n}\n";
+
+        File::put(base_path("packages/{$vendor}/{$package}/src/{$package}ServiceProvider.php"), $providerContent);
+        $this->info("Created ServiceProvider for {$vendor}/{$package}");
+
+        $composerFile = base_path('composer.json');
+        $composerData = json_decode(file_get_contents($composerFile), true);
+
+        $composerData['autoload']['psr-4']["{$providerNamespace}\\"] = "packages/{$vendor}/{$package}/src/";
+
+        file_put_contents($composerFile, json_encode($composerData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+
 
         $this->info('Package structure created successfully.');
     }
